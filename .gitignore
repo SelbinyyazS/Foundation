@@ -1,0 +1,37 @@
+# Git Ignore File for Django/FastAPI Project
+
+# Python
+############################
+# Byte-compiled / optimized / C extensions
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+############################
+# This is the most important one! Never commit your virtual environment.
+venv/
+
+# Database
+############################
+# We'll use a real database in production, so don't track the local dev database.
+db.sqlite3
+*.sqlite3
+
+# Environment Variables
+############################
+# We'll create this file later to hold secrets like API keys.
+# It should NEVER be committed to Git.
+.env
+
+# IDE / Editor specific
+############################
+.vscode/
+.idea/
+
+# Static and Media files (in a production setup)
+############################
+# We'll discuss this more later, but for now, it's good practice.
+/static/
+/media/
