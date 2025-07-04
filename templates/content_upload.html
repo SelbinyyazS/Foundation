@@ -1,0 +1,9 @@
+<!-- templates/content_upload.html -->
+<h2>Upload New Learning Material</h2>
+
+<!-- VERY IMPORTANT for file uploads -->
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>

@@ -1,0 +1,45 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Foundation</title>
+</head>
+<body>
+    <h1>Foundation!</h1>
+
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}!</p>
+
+        <!-- ADD THIS LINK -->
+        <a href="{% url 'content_upload' %}">Upload New Content</a>
+
+        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
+        </form>
+        <hr>
+
+        <!-- We will display the content here -->
+        <h3>Everything we got:</h3>
+        {% for item in content_list %}
+            <div>
+                <h4>{{ item.title }}</h4>
+                <p>by {{ item.creator.username }} on {{ item.created_at|date:"F d, Y" }}</p>
+                <p>{{ item.description }}</p>
+                {% if item.file %}
+                    <p><a href="{{ item.file.url }}">Download {{ item.get_content_type_display }}</a></p>
+                {% endif %}
+            </div>
+            <hr>
+        {% empty %}
+            <p>No content has been uploaded yet. Be the first!</p>
+    {% endfor %}
+    {% else %}
+        <p>You are not logged in.</p>
+        <a href="{% url 'login' %}">Log In</a> |
+        <a href="{% url 'signup' %}">Sign Up</a>
+    {% endif %}
+
+</body>
+</html>
