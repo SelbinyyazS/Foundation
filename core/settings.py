@@ -33,23 +33,26 @@ ALLOWED_HOSTS = ['127.0.0.1', 'foundation-nk81.onrender.com']
 
 
 # Application definition
-
+# The order of these apps is important, especially for static files.
 INSTALLED_APPS = [
-    # My Apps
-    'users.apps.UsersConfig',
-    'content.apps.ContentConfig',
-
-    # Django Default Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'whitenoise.runserver_nostatic',
     'django.contrib.messages',
-    'cloudinary_storage',
+    'cloudinary_storage',         # MUST be before 'django.contrib.staticfiles'
     'django.contrib.staticfiles',
     'cloudinary',
+    # 'whitenoise.runserver_nostatic' can be commented out or removed.
+    # It's mainly for local dev testing of whitenoise, but gunicorn doesn't use it.
+    # It's fine to leave it, but also fine to remove. Let's keep it for now.
+    'whitenoise.runserver_nostatic',
+    # My Apps
+    'users.apps.UsersConfig',
+    'content.apps.ContentConfig',
 ]
+
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -150,10 +153,10 @@ LOGOUT_REDIRECT_URL = '/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-STATIC_URL = 'static/'
+
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 
 # ==============================================================================
 CLOUDINARY_STORAGE = {
@@ -162,5 +165,5 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-
+# Set the default storage for MEDIA files to Cloudinary
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
