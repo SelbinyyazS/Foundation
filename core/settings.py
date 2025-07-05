@@ -1,8 +1,7 @@
 import os
-import sys
 from pathlib import Path
 import dj_database_url
-import django.contrib
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,11 +12,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # DEBUG is False unless explicitly set to 'True' in the environment
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-# Setup ALLOWED_HOSTS for Render and local development
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = []
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+ALLOWED_HOSTS.append('127.0.0.1')
 
 # Application definition
 INSTALLED_APPS = [
@@ -26,10 +25,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',
+    'whitenoise.runserver_nostatic', # Use this for serving static files
     'django.contrib.staticfiles',
     'cloudinary',
-    'whitenoise', # Use the base whitenoise app
+    'cloudinary_storage',
     # My Apps
     'users.apps.UsersConfig',
     'content.apps.ContentConfig',
@@ -89,13 +88,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# THIS IS THE EXPLICIT FIX FOR COLLECTSTATIC
-# It forces Django to find the admin static files.
-STATICFILES_DIRS = [
-    os.path.join(os.path.dirname(django.contrib.__file__), 'admin/static'),
-]
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (User Uploads)
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
