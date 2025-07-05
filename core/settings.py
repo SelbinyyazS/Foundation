@@ -108,7 +108,7 @@ USE_TZ = True
 # WhiteNoise is the best-in-class tool for this in production.
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_R, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # This setting determines how Django manages files that users upload.
 # We are using Cloudinary for this.
