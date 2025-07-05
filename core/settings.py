@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'foundation-learning.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'foundation-nk81.onrender.com']
 
 
 # Application definition
