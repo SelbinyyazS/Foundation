@@ -40,22 +40,17 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',         # MUST be before 'django.contrib.staticfiles'
+    'cloudinary_storage',         # Correctly placed before staticfiles
     'django.contrib.staticfiles',
     'cloudinary',
-    # 'whitenoise.runserver_nostatic' can be commented out or removed.
-    # It's mainly for local dev testing of whitenoise, but gunicorn doesn't use it.
-    # It's fine to leave it, but also fine to remove. Let's keep it for now.
     'whitenoise.runserver_nostatic',
     # My Apps
     'users.apps.UsersConfig',
     'content.apps.ContentConfig',
 ]
-
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware", # This is essential
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -153,17 +148,36 @@ LOGOUT_REDIRECT_URL = '/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+# ==============================================================================
+# STATIC AND MEDIA FILE CONFIGURATION (PRODUCTION)
+# ==============================================================================
 
+# STATIC FILES (CSS, JavaScript, Images for the site itself)
+# ------------------------------------------------------------------------------
+# This is the URL that your HTML will use to refer to static files
 STATIC_URL = '/static/'
+
+# This is the absolute path to a folder where `collectstatic` will gather
+# all static files from all your apps into one place for deployment.
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# This tells Django to use WhiteNoise's optimized storage backend to handle
+# static files, including compression and caching. This is what fixes the admin panel.
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# ==============================================================================
+
+# MEDIA FILES (User-Uploaded Content)
+# ------------------------------------------------------------------------------
+# We are using Cloudinary for all user-uploaded media files.
+# The dj3-cloudinary-storage library handles all the URLs, so MEDIA_URL and
+# MEDIA_ROOT are not needed.
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-# Set the default storage for MEDIA files to Cloudinary
+# This is the crucial line that tells Django: for any user-uploaded file
+# (in any FileField or ImageField), use the Cloudinary storage system.
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
