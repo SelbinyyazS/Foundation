@@ -30,7 +30,7 @@ class Content(models.Model):
     
     # The actual file. 'upload_to' specifies the sub-directory within our media folder.
     # 'blank=True, null=True' makes this field optional, for text-only posts.
-    file = models.FileField(upload_to='content_files/', blank=True, null=True)
+    file = models.FileField(blank=True, null=True)
     
     # --- Timestamps ---
     # auto_now_add=True automatically sets the timestamp when the object is first created.
